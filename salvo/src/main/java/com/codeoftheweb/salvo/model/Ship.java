@@ -10,6 +10,9 @@ public class Ship {
 	private Long id;
 	@ManyToOne
 	private GamePlayer gamePlayerId;
+	@Enumerated(value=EnumType.STRING)
+    private ShipType shipType;
+
 
 	//Empty Constructor
 	public Ship() {
@@ -33,7 +36,15 @@ public class Ship {
 		this.gamePlayerId = gamePlayerId;
 	}
 
-	//to String Method
+    public ShipType getShipType() {
+        return shipType;
+    }
+
+    public void setShipType(ShipType shipType) {
+        this.shipType = shipType;
+    }
+
+    //to String Method
 	@Override
 	public String toString() {
 		return "Ship{" +
