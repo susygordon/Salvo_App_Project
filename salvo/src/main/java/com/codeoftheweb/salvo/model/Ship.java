@@ -15,7 +15,7 @@ public class Ship {
 	public Ship() {
 	}
 
-	//Getters and Setters
+    //Getters and Setters
 
 	public Long getId() {
 		return id;
