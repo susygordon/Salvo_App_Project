@@ -1,5 +1,7 @@
 package com.codeoftheweb.salvo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,15 +9,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Player implements UserDetails {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
 	private Long id;
 
 	private String firstName;
@@ -30,11 +31,13 @@ public class Player implements UserDetails {
 	@NotNull
 	@NotEmpty
 	private String password;
-
 	private Date lastLogin;
 
-	@OneToMany
-	private List<GamePlayer> gamePlayerList;
+	@OneToMany (fetch = FetchType.EAGER)
+	private Set<GamePlayer> gamePlayerList;
+
+    @OneToMany(mappedBy="player", fetch=FetchType.EAGER, cascade= CascadeType.ALL)
+    private Set<GamePlayer> gamePlayers = new HashSet<>();
 
 	//Empty Constructor
 	public Player() {
@@ -45,7 +48,9 @@ public class Player implements UserDetails {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.userName = userName;
+       // this.xp = 0;
 	}
+
 
 	//Getters and Setters
 	public Long getId() {
@@ -79,6 +84,10 @@ public class Player implements UserDetails {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+
+    public Set<GamePlayer> getGamePlayers(){
+        return this.gamePlayers;
+    }
 
 	//toString Method
 	@Override
@@ -139,10 +148,52 @@ public class Player implements UserDetails {
 	}
 
 	public List<GamePlayer> getGamePlayerList() {
-		return gamePlayerList;
+		return (List<GamePlayer>) gamePlayerList;
 	}
 
 	public void setGamePlayerList(List<GamePlayer> gamePlayerList) {
-		this.gamePlayerList = gamePlayerList;
+		this.gamePlayerList = (Set<GamePlayer>) gamePlayerList;
 	}
+
+    //método para establecer la relación entre un objeto Player y un objeto GamePlayer
+    public void addGamePlayer(GamePlayer gamePlayer) {
+        this.gamePlayers.add(gamePlayer);
+        gamePlayer.setPlayer(this);
+    }
+
+    //método que retorna todos los games relacionados con el player a partir de los gamePlayers
+    @JsonIgnore
+    public List<Game> getGames() {
+        return this.gamePlayers.stream().map(x -> x.getGame()).collect(Collectors.toList());
+    }
+
+    //métodos (comportamientos de los objetos del tipo Player)
+    public String greet(){
+        return "Hi! my name is " + this.firstName;
+    }
+
+    public String completeName(){
+        return this.firstName + " " + this.lastName;
+    }
+
+   /* public String getExperience(){
+        if(this.xp < 5000){
+            return "newbie";
+        } else if(this.xp < 25000){
+            return "amateur";
+        } else if(this.xp < 50000){
+            return "pro";
+        } else{
+            return "legend";
+        }
+    }*/
+
+    //DTO (data transfer object) para administrar la info de Player
+    public Map<String, Object> playerDTO(){
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("id", this.getId());
+        dto.put("username", this.getUserName());
+        return dto;
+    }
+
 }

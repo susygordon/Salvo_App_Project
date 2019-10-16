@@ -1,5 +1,7 @@
 package com.codeoftheweb.salvo.rest.controller;
 
+import com.codeoftheweb.salvo.exception.GameNotFoundException;
+import com.codeoftheweb.salvo.model.Game;
 import com.codeoftheweb.salvo.model.GamePlayer;
 import com.codeoftheweb.salvo.service.GamePlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RequestMapping("/gamePlayer")
+@RequestMapping("/gamePlayers")
 @RestController
 public class GamePlayerRestController {
     @Autowired
@@ -22,9 +24,8 @@ public class GamePlayerRestController {
 
     }
 
-    @GetMapping("/{id}")
     public GamePlayer findGamePlayerById(@PathVariable("id") Long id) {
         //return gamePlayerService.findById(id).orElseThrow(()->new RuntimeException());
-        return gamePlayerService.findById(id).get();
+        return gamePlayerService.findById(id);
     }
 }

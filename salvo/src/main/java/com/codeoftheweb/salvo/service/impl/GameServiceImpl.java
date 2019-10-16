@@ -16,8 +16,14 @@ public class GameServiceImpl implements GameService {
     private GameRepository gameRepository;
 
 	@Override
-    public Optional<Game> findById(Long id) {
-        return gameRepository.findById(id);
+    public Game findById(Long id) {
+		Game game = new Game();
+		try{
+			game = gameRepository.findById(id).get();
+		}catch(Exception e){
+			System.out.println("No se encontro este game. Error:"+e.getMessage());
+		}
+        return game;
 
     }
 

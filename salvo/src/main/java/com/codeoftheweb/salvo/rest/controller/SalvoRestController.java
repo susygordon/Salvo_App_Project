@@ -26,6 +26,6 @@ public class SalvoRestController {
     @GetMapping("/{id}")
     public Salvo findSalvoById(@PathVariable("id") Long id) {
         //return salvoService.findById(id).orElseThrow(()->new RuntimeException());
-        return salvoService.findById(id).get();
+        return salvoService.findById(id).orElseThrow(() -> new RuntimeException());
     }
 }

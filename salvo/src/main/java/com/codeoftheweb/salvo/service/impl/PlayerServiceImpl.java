@@ -20,8 +20,8 @@ public class PlayerServiceImpl implements PlayerService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public Optional<Player> findById(Long id){
-        return playerRepository.findById(id);
+    public Player findById(Long id){
+        return playerRepository.findById(id).get();
 
     }
 	@Override

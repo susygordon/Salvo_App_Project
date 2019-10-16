@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GameService {
-	Optional<Game> findById(Long id);
+	Game findById(Long id);
 
 	List<Game> findAll();
 

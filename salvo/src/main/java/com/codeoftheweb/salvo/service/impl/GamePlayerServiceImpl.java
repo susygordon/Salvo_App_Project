@@ -15,8 +15,9 @@ public class GamePlayerServiceImpl implements GamePlayerService {
     private GamePlayerRepository gamePlayerRepository;
 
     @Override
-    public Optional<GamePlayer> findById(Long id) {
-        return gamePlayerRepository.findById(id);
+    public GamePlayer findById(Long id) {
+
+        return gamePlayerRepository.findById(id).get();
 
     }
 

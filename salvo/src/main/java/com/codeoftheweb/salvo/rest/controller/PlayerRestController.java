@@ -31,7 +31,7 @@ public class PlayerRestController {
 
 	@GetMapping("/{id}")
 	public Player findPlayerById(@PathVariable("id") Long id) {
-		return playerService.findById(id).orElseThrow(() -> new RuntimeException());
+		return playerService.findById(id);
 	}
 
 	@PostMapping

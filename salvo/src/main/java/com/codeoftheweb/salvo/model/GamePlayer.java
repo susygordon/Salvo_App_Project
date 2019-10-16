@@ -1,27 +1,43 @@
 package com.codeoftheweb.salvo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class GamePlayer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     private Long id;
+
     private Date joinDate;
+
     @ManyToOne
     private Player player;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     private Game game;
-    @OneToMany
+
+    @JoinColumn(name = "game_player_id_id")
+    @OneToMany (fetch = FetchType.EAGER)
     private List<Ship> ships;
+
     @OneToMany
     private List<Salvo> salvos;
 
     //Empty Constructor
     public GamePlayer() {
+    }
+
+    public GamePlayer(Game game, Player player, Date joinDate) {
+        this.game = game;
+        this.player = player;
+        this.joinDate = joinDate;
     }
 
     //Getters and Setters
@@ -57,6 +73,27 @@ public class GamePlayer {
         this.game = game;
     }
 
+    public List<Ship> getShips() {
+        return ships;
+    }
+
+    public void setShips(List<Ship> ships) {
+        this.ships = ships;
+    }
+
+    public List<Salvo> getSalvos() {
+        return salvos;
+    }
+
+    public void setSalvos(List<Salvo> salvos) {
+        this.salvos = salvos;
+    }
+
+    public void addShip(Ship ship){
+        this.ships.add(ship);
+        ship.setGamePlayerId(this);
+    }
+
     //toString Method
     @Override
     public String toString() {
@@ -66,5 +103,13 @@ public class GamePlayer {
                 ", player=" + player +
                 ", game=" + game +
                 '}';
+    }
+
+    //DTO (data transfer object) para administrar la info de GamePlayer
+    public Map<String, Object> gamePlayerDTO(){
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("id", this.getId());
+        dto.put("player", this.getPlayer().playerDTO());
+        return dto;
     }
 }
