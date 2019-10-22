@@ -1,58 +1,47 @@
 package com.codeoftheweb.salvo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
-public class Player implements UserDetails {
+public class Player {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+	@GenericGenerator(name = "native", strategy = "native")
+	private long id;
 
-	private String firstName;
 
-	private String lastName;
-
+	//Le restrijo que no sea nulo,
+	// que no este vacio y que sea unico
 	@NotNull
 	@NotEmpty
 	@Column(unique = true)
-	private String userName;
+	private String email;
+
+	private String name;
 
 	@NotNull
 	@NotEmpty
 	private String password;
-	private Date lastLogin;
 
-	@OneToMany (fetch = FetchType.EAGER)
-	private Set<GamePlayer> gamePlayerList;
+	@OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+	Set<GamePlayer> gamePlayers;
 
-    @OneToMany(mappedBy="player", fetch=FetchType.EAGER, cascade= CascadeType.ALL)
-    private Set<GamePlayer> gamePlayers = new HashSet<>();
-
-	//Empty Constructor
 	public Player() {
 	}
 
-	//Constructor with parameters
-	public Player(String firstName, String lastName, String userName) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.userName = userName;
-       // this.xp = 0;
+	public Player(String email, String name) {
+		this.email = email;
+		this.name = name;
 	}
 
-
-	//Getters and Setters
 	public Long getId() {
 		return id;
 	}
@@ -61,139 +50,59 @@ public class Player implements UserDetails {
 		this.id = id;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getEmail() {
+		return this.email;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public String getName() {
+		return this.name;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getUserName() {
-		return userName;
+	public Set<GamePlayer> getGamePlayers() {
+		return gamePlayers;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void addGamePlayer(GamePlayer gamePlayer) {
+		gamePlayer.setPlayer(this);
+		this.gamePlayers.add(gamePlayer);
 	}
 
-    public Set<GamePlayer> getGamePlayers(){
-        return this.gamePlayers;
-    }
-
-	//toString Method
-	@Override
-	public String toString() {
-		return "Player{" +
-				"id=" + id +
-				", firstName='" + firstName + '\'' +
-				", lastName='" + lastName + '\'' +
-				", userName='" + userName + '\'' +
-				'}';
+	public void setGamePlayers(Set<GamePlayer> gamePlayers) {
+		this.gamePlayers = gamePlayers;
 	}
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.singletonList(new SimpleGrantedAuthority(RoleEnum.PLAYER.name()));
+	public List<Game> getGames() {
+		return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
 	}
 
-	@Override
+	public Map<String, Object> toDTO() {
+		Map<String, Object> dto = new LinkedHashMap<String, Object>();
+		dto.put("id", getId());
+		dto.put("email", getEmail());
+		return dto;
+	}
+
 	public String getPassword() {
-		return this.password;
-	}
-
-	@Override
-	public String getUsername() {
-		return this.userName;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return true;
+		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-	public Date getLastLogin() {
-		return lastLogin;
+	public void setLastLogin(Date date) {
+
 	}
 
-	public void setLastLogin(Date lastLogin) {
-		this.lastLogin = lastLogin;
+	public void setEmail(Date date) {
+		this.email = email;
 	}
-
-	public List<GamePlayer> getGamePlayerList() {
-		return (List<GamePlayer>) gamePlayerList;
-	}
-
-	public void setGamePlayerList(List<GamePlayer> gamePlayerList) {
-		this.gamePlayerList = (Set<GamePlayer>) gamePlayerList;
-	}
-
-    //método para establecer la relación entre un objeto Player y un objeto GamePlayer
-    public void addGamePlayer(GamePlayer gamePlayer) {
-        this.gamePlayers.add(gamePlayer);
-        gamePlayer.setPlayer(this);
-    }
-
-    //método que retorna todos los games relacionados con el player a partir de los gamePlayers
-    @JsonIgnore
-    public List<Game> getGames() {
-        return this.gamePlayers.stream().map(x -> x.getGame()).collect(Collectors.toList());
-    }
-
-    //métodos (comportamientos de los objetos del tipo Player)
-    public String greet(){
-        return "Hi! my name is " + this.firstName;
-    }
-
-    public String completeName(){
-        return this.firstName + " " + this.lastName;
-    }
-
-   /* public String getExperience(){
-        if(this.xp < 5000){
-            return "newbie";
-        } else if(this.xp < 25000){
-            return "amateur";
-        } else if(this.xp < 50000){
-            return "pro";
-        } else{
-            return "legend";
-        }
-    }*/
-
-    //DTO (data transfer object) para administrar la info de Player
-    public Map<String, Object> playerDTO(){
-        Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("id", this.getId());
-        dto.put("username", this.getUserName());
-        return dto;
-    }
-
 }

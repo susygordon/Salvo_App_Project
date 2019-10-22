@@ -1,34 +1,35 @@
 package com.codeoftheweb.salvo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 public class Game {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @NotNull
-    @NotEmpty
-    private Date creationDate;
-    @OneToMany(mappedBy = "game", cascade = CascadeType.MERGE)
-    private List<GamePlayer> gamePlayers;
 
-    //Empty Constructor
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
+    private long id;
+    private Date creationDate;
+
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
+    Set<GamePlayer> gamePlayers;
+
     public Game() {
+        this.creationDate = new Date();
     }
 
-    //Constructor with parameters
-    public Game(Long id, Date creationDate) {
-        this.id = id;
+    public Game(Date creationDate) {
         this.creationDate = creationDate;
     }
 
-    //Getters and Setters
     public Long getId() {
         return id;
     }
@@ -38,46 +39,44 @@ public class Game {
     }
 
     public Date getCreationDate() {
-        return creationDate;
+        return this.creationDate;
     }
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
 
-    public List<GamePlayer> getGamePlayers() {
-        return this.gamePlayers;
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
     }
 
-    //método para establecer la relación entre un objeto Game y un objeto GamePlayer
     public void addGamePlayer(GamePlayer gamePlayer) {
-        //se agrega el gamePlayer que ingresa como parámetro al set declarado en los atributos
-        this.gamePlayers.add(gamePlayer);
-        //al gamePlayer ingresado se le agrega este game mediante su setter en la clase GamePlayer
         gamePlayer.setGame(this);
+        this.gamePlayers.add(gamePlayer);
     }
 
-    //método que retorna todos los players relacionados con el game a partir de los gamePlayers
+    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
+        this.gamePlayers = gamePlayers;
+    }
+
+    @JsonIgnoreProperties(value = "games")
     public List<Player> getPlayers() {
-        return this.gamePlayers.stream().map(gp -> gp.getPlayer()).collect(Collectors.toList());
+        return gamePlayers.stream().map(sub -> sub.getPlayer()).collect(toList());
     }
 
-    //DTO (data transfer object) para administrar la info de Game
-    public Map<String, Object> gameDTO() {
-        Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("id", this.getId());
-        dto.put("created", this.getCreationDate());
-        dto.put("gamePlayers", this.getGamePlayers().stream().map(GamePlayer::gamePlayerDTO).collect(Collectors.toList()));
+    public Map<String, Object> toDTO() {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        Stream<Map<String, Object>> gamePlayerDTO = getGamePlayers().stream().map(GamePlayer::toDTO);
+        dto.put("id", getId());
+        dto.put("created", getCreationDate());
+        dto.put("gamePlayers", gamePlayerDTO.collect(toList()));
         return dto;
     }
 
-
-    //toString Method
-    @Override
-    public String toString() {
-        return "Game{" +
-                "id=" + id +
-                ", creationDate=" + creationDate +
-                '}';
+    private List<Map> shipLocationsList(Set<Ship> ships) {
+        return ships.stream()
+                .map(ship -> ship.toDTO())
+                .collect(Collectors.toList());
     }
+
 }

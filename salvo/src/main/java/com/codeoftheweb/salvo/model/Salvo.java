@@ -1,86 +1,78 @@
 package com.codeoftheweb.salvo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 public class Salvo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private Long id;
+    private long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "gamePlayer_id")
-    private GamePlayer gamePlayerId;
-    //Se van contando los turnos, cada disparo está asociado con el turno en que se hizo
-
-    private Integer turn;
-
-    @OneToMany
-    private List<SalvoLocations> salvoLocations;
+    private GamePlayer gamePlayer;
 
     @ElementCollection
-    @Column(name="location", nullable = false)
-    @CollectionTable(name="SALVO_LOCATION", joinColumns = {@JoinColumn(name = "SALVO_ID")})
+    @Column(name = "location")
     private List<String> locations = new ArrayList<>();
 
-    //Empty Constructor
+    private int turn;
+
     public Salvo() {
     }
 
-    //Constructor with parameters
-    public Salvo(Long id, GamePlayer gamePlayerId, Integer turn) {
-        this.id = id;
-        this.gamePlayerId = gamePlayerId;
+    public Salvo(GamePlayer gamePlayer, int turn, List<String> locations) {
+        this.gamePlayer = gamePlayer;
         this.turn = turn;
+        this.locations = locations;
     }
 
-    //Getters and Setters
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public GamePlayer getGamePlayerId() {
-        return gamePlayerId;
+    public GamePlayer getGamePlayer() {
+        return gamePlayer;
     }
 
-    public void setGamePlayerId(GamePlayer gamePlayerId) {
-        this.gamePlayerId = gamePlayerId;
+    public void setGamePlayer(GamePlayer gamePlayer) {
+        this.gamePlayer = gamePlayer;
     }
 
-    public Integer getTurn() {
+    public List<String> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<String> locations) {
+        this.locations = locations;
+    }
+
+    public int getTurn() {
         return turn;
     }
 
-    public void setTurn(Integer turn) {
+    public void setTurn(int turn) {
         this.turn = turn;
     }
 
-    public List<SalvoLocations> getSalvoLocations() {
-        return salvoLocations;
+    public Map<String, Object> toDTO() {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("turn", this.getTurn());
+        dto.put("player", this.getGamePlayer().getPlayer().getId());
+        dto.put("locations", this.getLocations());
+        return dto;
     }
 
-    public void setSalvoLocations(List<SalvoLocations> salvoLocations) {
-        this.salvoLocations = salvoLocations;
-    }
-
-    @Override
-    public String toString() {
-        return "Salvo{" +
-                "id=" + id +
-                ", gamePlayerId=" + gamePlayerId +
-                ", turn=" + turn +
-                ", salvoLocations=" + salvoLocations +
-                '}';
-    }
 }

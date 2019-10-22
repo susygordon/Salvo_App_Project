@@ -1,16 +1,12 @@
 package com.codeoftheweb.salvo.security;
 
-import com.codeoftheweb.salvo.service.impl.UserDetailsServiceImpl;
-import org.springframework.http.HttpMethod;
+import com.codeoftheweb.salvo.service.UserDetailsServiceImpl;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import static com.codeoftheweb.salvo.security.SecurityConstants.*;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
