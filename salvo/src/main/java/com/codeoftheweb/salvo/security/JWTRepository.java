@@ -14,6 +14,7 @@ public class JWTRepository {
 	public static final JWTRepository instance = new JWTRepository();
 	private List<String> tokens = new ArrayList<>();
 
+
 	private JWTRepository() {
 	}
 

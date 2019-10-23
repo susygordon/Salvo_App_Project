@@ -1,4 +1,4 @@
-package com.codeoftheweb.salvo.rest.controller;
+package com.codeoftheweb.salvo.controller;
 
 import com.codeoftheweb.salvo.model.Game;
 import com.codeoftheweb.salvo.model.GamePlayer;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-public class SalvoRestController {
+public class SalvoController {
 
     @Autowired
     private GameRepository gameRepository;

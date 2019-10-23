@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import static com.codeoftheweb.salvo.security.SecurityConstants.HEADER_STRING;
 import static com.codeoftheweb.salvo.security.SecurityConstants.TOKEN_PREFIX;
 
+
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
 		super(authenticationManager);

@@ -21,8 +21,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Player player = playerRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException(username));
+        Player player = playerRepository.findFirstByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
         //Envio el email del player, el password y envio los permisos que tiene vacios por ahora
-        return new User(player.getEmail(), player.getName(), Collections.emptyList());
+        return new User(player.getEmail(), player.getPassword(), Collections.emptyList());
     }
 }

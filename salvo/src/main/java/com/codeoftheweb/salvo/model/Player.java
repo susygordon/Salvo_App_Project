@@ -101,8 +101,4 @@ public class Player {
 	public void setLastLogin(Date date) {
 
 	}
-
-	public void setEmail(Date date) {
-		this.email = email;
-	}
 }
