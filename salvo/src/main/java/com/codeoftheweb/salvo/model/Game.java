@@ -22,12 +22,32 @@ public class Game {
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     Set<GamePlayer> gamePlayers;
 
+    private List<Score> scores;
+    public Game(Integer id, Date creationDate) {
+        this.id = id;
+        this.creationDate = creationDate;
+    }
+
     public Game() {
         this.creationDate = new Date();
     }
 
     public Game(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Game(Date creationDate, List<GamePlayer> gamePlayers, List<Score> scores) {
+        this.creationDate = creationDate;
+        this.gamePlayers = (Set<GamePlayer>) gamePlayers;
+        this.scores = scores;
+    }
+
+    public List<Score> getScores() {
+        return scores;
+    }
+
+    public void setScores(List<Score> scores) {
+        this.scores = scores;
     }
 
     public Long getId() {

@@ -1,28 +1,62 @@
 package com.codeoftheweb.salvo.service;
 
 import com.codeoftheweb.salvo.model.Player;
+import com.codeoftheweb.salvo.model.Score;
 import com.codeoftheweb.salvo.repository.PlayerRepository;
+import com.codeoftheweb.salvo.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
-
+class PlayerServiceImpl implements PlayerService {
     @Autowired
     private PlayerRepository playerRepository;
+    @Override
+    public List<Player> findAll() {
+        return playerRepository.findAll();
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Player player = playerRepository.findFirstByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
-        //Envio el email del player, el password y envio los permisos que tiene vacios por ahora
-        return new User(player.getEmail(), player.getPassword(), Collections.emptyList());
+    public Double totalScore(Player player) {
+        Double total=0.0;
+        for(Score score:player.getScores()){
+            total+=score.getScore();
+        }
+        return total;
+    }
+
+    @Override
+    public Integer totalWins(Player player) {
+        Integer totalWins = 0;
+        for(Score score:player.getScores()){
+            if(score.getScore()==1.5){
+                totalWins+=1;
+            }
+
+        }
+        return totalWins;
+    }
+
+    @Override
+    public Integer totalLosses(Player player) {
+        Integer totalLosses = 0;
+        for(Score score:player.getScores()){
+            if(score.getScore()==0){
+                totalLosses+=1;
+            }
+        }
+        return totalLosses;
+    }
+
+    @Override
+    public Integer totalTies(Player player) {
+        Integer totalTies =0;
+        for(Score score:player.getScores()){
+            if(score.getScore()==0.5){
+                totalTies+=1;
+            }
+        }
+        return totalTies;
     }
 }

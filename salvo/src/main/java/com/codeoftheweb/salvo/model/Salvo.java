@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -22,17 +23,24 @@ public class Salvo {
 
     @ElementCollection
     @Column(name = "location")
-    private List<String> locations = new ArrayList<>();
+    private List<String> salvoLocations = new ArrayList<>();
 
     private int turn;
 
-    public Salvo() {
+    @JoinColumn(name="salvoID")
+    @JsonIgnore
+    private Salvo salvo;
+    private String cell;
+
+    public Salvo(GamePlayer gamePlayer, int i) {
     }
 
-    public Salvo(GamePlayer gamePlayer, int turn, List<String> locations) {
+    public Salvo(GamePlayer gamePlayer, int turn, List<String> locations, Salvo salvo, String cell) {
         this.gamePlayer = gamePlayer;
         this.turn = turn;
-        this.locations = locations;
+        this.salvoLocations = salvoLocations;
+        this.salvo = salvo;
+        this.cell = cell;
     }
 
     public long getId() {
@@ -52,11 +60,11 @@ public class Salvo {
     }
 
     public List<String> getLocations() {
-        return locations;
+        return salvoLocations;
     }
 
     public void setLocations(List<String> locations) {
-        this.locations = locations;
+        this.salvoLocations = salvoLocations;
     }
 
     public int getTurn() {
@@ -65,6 +73,30 @@ public class Salvo {
 
     public void setTurn(int turn) {
         this.turn = turn;
+    }
+
+    public Salvo getSalvo() {
+        return salvo;
+    }
+
+    public void setSalvo(Salvo salvo) {
+        this.salvo = salvo;
+    }
+
+    public String getCell() {
+        return cell;
+    }
+
+    public void setCell(String cell) {
+        this.cell = cell;
+    }
+
+    @Override
+    public String toString() {
+        return "SalvoLocation{" +
+
+                ", cell='" + cell + '\'' +
+                '}';
     }
 
     public Map<String, Object> toDTO() {

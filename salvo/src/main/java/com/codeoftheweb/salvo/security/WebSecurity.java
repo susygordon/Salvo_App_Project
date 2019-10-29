@@ -1,6 +1,6 @@
 package com.codeoftheweb.salvo.security;
 
-import com.codeoftheweb.salvo.service.UserDetailsServiceImpl;
+import com.codeoftheweb.salvo.service.PlayerService;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,8 +18,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
     private PasswordEncoder passwordEncoder;
 
-    public WebSecurity(UserDetailsServiceImpl userDetailsService, PasswordEncoder passwordEncoder) {
-        this.userDetailsService = userDetailsService;
+    public WebSecurity(PlayerService playerService, PasswordEncoder passwordEncoder) {
+        this.userDetailsService  = userDetailsService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -27,6 +27,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
+                .antMatchers("/**").permitAll()
                 .antMatchers(SWAGGER_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and()

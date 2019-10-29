@@ -34,6 +34,9 @@ public class Player {
 	@OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
 	Set<GamePlayer> gamePlayers;
 
+	@OneToMany(mappedBy = "player",cascade = CascadeType.MERGE)
+	private List<Score> scores;
+
 	public Player() {
 	}
 
@@ -42,13 +45,22 @@ public class Player {
 		this.name = name;
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public List<Score> getScores() {
+		return scores;
+	}
+
+	public void setScores(List<Score> scores) {
+		this.scores = scores;
+	}
+
 
 	public String getEmail() {
 		return this.email;

@@ -19,6 +19,8 @@ public class Score {
 
     private int points;
 
+    private Double score;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "player_id")
     private Player player;
@@ -30,11 +32,12 @@ public class Score {
     public Score() {
     }
 
-    public Score(int points, Game game, Player player, LocalDateTime finishDate) {
+    public Score(int points, Game game, Player player, double score, LocalDateTime finishDate) {
         this.points = points;
         this.game = game;
         this.player = player;
         this.finishDate = finishDate;
+        this.score = score;
     }
 
     public long getId() {
@@ -75,6 +78,14 @@ public class Score {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
     }
 
     public Map<String, Object> scoreDTO() {
