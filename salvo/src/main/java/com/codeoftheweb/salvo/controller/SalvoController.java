@@ -1,17 +1,14 @@
 package com.codeoftheweb.salvo.controller;
 
-import com.codeoftheweb.salvo.dto.LeaderboardDTO;
 import com.codeoftheweb.salvo.dto.SalvoDTO;
 import com.codeoftheweb.salvo.model.*;
 import com.codeoftheweb.salvo.repository.GamePlayerRepository;
 import com.codeoftheweb.salvo.repository.GameRepository;
 import com.codeoftheweb.salvo.repository.PlayerRepository;
-import com.codeoftheweb.salvo.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import java.util.*;
 
@@ -21,13 +18,13 @@ public class SalvoController {
 
     @Autowired
     private GameRepository gameRepository;
+
     @Autowired
     private PlayerRepository playerRepository;
+
     @Autowired
     private GamePlayerRepository gamePlayerRepository;
 
-    @Autowired
-    private PlayerService playerService;
 
     @RequestMapping("/games")
     public List<Map<String,Object>> getGames(){
@@ -62,28 +59,29 @@ public class SalvoController {
 
 
     }
-    @RequestMapping("/leaderboard")
-    public List<Map<String,Object>>getLeaderBoard(){
-        List<Map<String,Object>> leaderboardList = new ArrayList<>();
 
-        for(Player player: playerService.findAll()){
-            Map<String,Object> leaderboardMap = new LinkedHashMap<>();
-            leaderboardMap.put("player",player.getEmail());
-            LeaderboardDTO leaderboardDTO = new LeaderboardDTO();
-            leaderboardDTO.setTotalWins(playerService.totalWins(player));
-            leaderboardDTO.setTotalLosses(playerService.totalLosses(player));
-            leaderboardDTO.setTotalTies(playerService.totalTies(player));
-            leaderboardDTO.setTotalScore(playerService.totalScore(player));
-            leaderboardMap.put("leaderBoard",leaderboardDTO);
-            leaderboardList.add(leaderboardMap);
-
-
-
-        }
-
-        return leaderboardList;
+    private List<Player> getAllPlayers(){
+        return playerRepository.findAll();
     }
 
+    @RequestMapping("/leaderboard")
+    public List<Map<String,Object>> getScoreView(){
+        List<Map<String,Object>> finalList = new ArrayList<>();
+        this.getAllPlayers().forEach(player -> {
+            if(!player.getScores().isEmpty()) {
+                Map<String, Object> dto = new LinkedHashMap<>();
+                Map<String, Object> dtoScore = new LinkedHashMap<>();
+                dtoScore.put("total",player.getTotalScore() );
+                dtoScore.put("won", player.getTotalWins());
+                dtoScore.put("lost", player.getTotalLoses());
+                dtoScore.put("tied", player.getTotalTies());
+                dto.put("name",player.getEmail());
+                dto.put("score",dtoScore);
+                finalList.add(dto);
+            }
+        });
+        return finalList;
+    }
     @RequestMapping("/game_view/{id}")
     public Map<String,Object> getGameView(@PathVariable Integer id){
         Game game = this.gameRepository.getOne(id);

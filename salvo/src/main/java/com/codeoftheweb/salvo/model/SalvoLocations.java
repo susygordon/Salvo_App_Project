@@ -1,3 +1,4 @@
+/*
 package com.codeoftheweb.salvo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,4 +46,4 @@ public class SalvoLocations {
                 ", cell='" + cell + '\'' +
                 '}';
     }
-}
+}*/

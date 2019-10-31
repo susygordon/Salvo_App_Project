@@ -6,12 +6,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 @SpringBootApplication
 public class SalvoApplication {
@@ -21,20 +18,16 @@ public class SalvoApplication {
     }
 
     @Bean
-    public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository, ScoreRepository scoreRepository, SalvoLocationsRepository salvoLocationsRepository) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return (args) -> {
+    public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, GamePlayerRepository gamePlayerRepository,
+                                      ShipRepository shipRepository, SalvoRepository salvoRepository, ScoreRepository scoreRepository) {
 
+        return (args) -> {
 
             // save a couple of players
             Player jackBauer = new Player("j.bauer@ctu.gov", "Jack Bauer");
-            jackBauer.setPassword(passwordEncoder.encode("Password123"));
             Player chloeOBrian = new Player("c.obrian@ctu.gov", "Chloe O'Brian");
-            chloeOBrian.setPassword(passwordEncoder.encode("Password123"));
             Player kimBauer = new Player("kim_bauer@gmail.com", "Kim Bauer");
-            kimBauer.setPassword(passwordEncoder.encode("Password123"));
             Player tonyAlmeida = new Player("t.almeida@ctu.gov", "Tony Almeida");
-            tonyAlmeida.setPassword(passwordEncoder.encode("Password123"));
 
             playerRepository.save(jackBauer);
             playerRepository.save(chloeOBrian);
@@ -42,15 +35,15 @@ public class SalvoApplication {
             playerRepository.save(tonyAlmeida);
 
             // save a couple of games
-            Date date = new Date();
-            Game game1 = new Game(date);
-            Game game2 = new Game(Date.from(date.toInstant().plusSeconds(3600)));
-            Game game3 = new Game(Date.from(date.toInstant().plusSeconds(7200)));
-            Game game4 = new Game();
-            Game game5 = new Game();
-            Game game6 = new Game();
-            Game game7 = new Game();
-            Game game8 = new Game();
+           Date date = new Date();
+           Game game1 = new Game(date);
+           Game game2 = new Game(Date.from(date.toInstant().plusSeconds(3600)));
+           Game game3 = new Game(Date.from(date.toInstant().plusSeconds(7200)));
+           Game game4 = new Game();
+           Game game5 = new Game();
+           Game game6 = new Game();
+           Game game7 = new Game();
+           Game game8 = new Game();
 
             gameRepository.save(game1);
             gameRepository.save(game2);
@@ -176,29 +169,65 @@ public class SalvoApplication {
             shipRepository.save(ship26);
             shipRepository.save(ship27);
 
-            salvoLocationsRepository.save(new SalvoLocations(salvoRepository.findById(1).get(),"B5"));
-            salvoLocationsRepository.save(new SalvoLocations(salvoRepository.getOne(1),"C5"));
-            salvoLocationsRepository.save(new SalvoLocations(salvoRepository.getOne(1),"F1"));
+         Salvo salvo1 = new Salvo(gameplayer1, 1, Arrays.asList("B5", "C5", "F1"));
+         salvoRepository.save(salvo1);
+         Salvo salvo2 = new Salvo(gameplayer2, 1, Arrays.asList("B4", "B5", "B6"));
+         salvoRepository.save(salvo2);
+         Salvo salvo3 = new Salvo(gameplayer1, 2, Arrays.asList("F2", "D5"));
+         salvoRepository.save(salvo3);
+         Salvo salvo4 = new Salvo(gameplayer2, 2, Arrays.asList("E1", "H3", "A2"));
+         salvoRepository.save(salvo4);
+         Salvo salvo5 = new Salvo(gameplayer3, 1, Arrays.asList("A2", "A4", "G6"));
+         salvoRepository.save(salvo5);
+         Salvo salvo6 = new Salvo(gameplayer4, 1, Arrays.asList("B5", "D5", "C7"));
+         salvoRepository.save(salvo6);
+         Salvo salvo7 = new Salvo(gameplayer3, 2, Arrays.asList("A3", "H6"));
+         salvoRepository.save(salvo7);
+         Salvo salvo8 = new Salvo(gameplayer4, 2, Arrays.asList("C5", "C6"));
+         salvoRepository.save(salvo8);
+         Salvo salvo9 = new Salvo(gameplayer5, 1, Arrays.asList("G6", "H6", "A4"));
+         salvoRepository.save(salvo9);
+         Salvo salvo10 = new Salvo(gameplayer6, 1, Arrays.asList("H1", "H2", "H3"));
+         salvoRepository.save(salvo10);
+         Salvo salvo11 = new Salvo(gameplayer5, 2, Arrays.asList("A2", "A3", "D8"));
+         salvoRepository.save(salvo11);
+         Salvo salvo12 = new Salvo(gameplayer6, 2, Arrays.asList("E1", "F2", "G3"));
+         salvoRepository.save(salvo12);
+         Salvo salvo13 = new Salvo(gameplayer7, 1, Arrays.asList("A3", "A4", "F7"));
+         salvoRepository.save(salvo13);
+         Salvo salvo14 = new Salvo(gameplayer8, 1, Arrays.asList("B5", "C6", "H1"));
+         salvoRepository.save(salvo14);
+         Salvo salvo15 = new Salvo(gameplayer7, 2, Arrays.asList("A2", "G6", "H6"));
+         salvoRepository.save(salvo15);
+         Salvo salvo16 = new Salvo(gameplayer8, 2, Arrays.asList("C5", "C7", "D5"));
+         salvoRepository.save(salvo16);
+         Salvo salvo17 = new Salvo(gameplayer9, 1, Arrays.asList("A1", "A2", "A3"));
+         salvoRepository.save(salvo17);
+         Salvo salvo18 = new Salvo(gameplayer10, 1, Arrays.asList("B5", "B6", "C7"));
+         salvoRepository.save(salvo18);
+         Salvo salvo19 = new Salvo(gameplayer9, 2, Arrays.asList("G6", "G7", "G8"));
+         salvoRepository.save(salvo19);
+         Salvo salvo20 = new Salvo(gameplayer10, 2, Arrays.asList("C6", "D6", "E6"));
+         salvoRepository.save(salvo20);
+         Salvo salvo21 = new Salvo(gameplayer10, 3, Arrays.asList("H1", "H8"));
+         salvoRepository.save(salvo21);
 
-            salvoRepository.save(new Salvo(gamePlayerRepository.getOne(2),1));
-            salvoLocationsRepository.save(new SalvoLocations(salvoRepository.getOne(2),"B4"));
-            salvoLocationsRepository.save(new SalvoLocations(salvoRepository.getOne(2),"B5"));
-            salvoLocationsRepository.save(new SalvoLocations(salvoRepository.getOne(2),"B6"));
-            //-------------game 1 -turn 2 ------------//
-            salvoRepository.save(new Salvo(gamePlayerRepository.findById(1).get(),2));
-
-            salvoLocationsRepository.save(new SalvoLocations(salvoRepository.getOne(3),"F2"));
-            salvoLocationsRepository.save(new SalvoLocations(salvoRepository.getOne(3),"D5"));
-
-            salvoRepository.save(new Salvo(gamePlayerRepository.getOne(2),2));
-            salvoLocationsRepository.save(new SalvoLocations(salvoRepository.getOne(4),"E1"));
-            salvoLocationsRepository.save(new SalvoLocations(salvoRepository.getOne(4),"H3"));
-            salvoLocationsRepository.save(new SalvoLocations(salvoRepository.getOne(4),"A2"));
-
-            scoreRepository.save(new Score(1,game1,jackBauer,1.5, LocalDateTime.now()));
-            scoreRepository.save(new Score(2,game1,chloeOBrian,0.0,LocalDateTime.now()));
-
-
+            Score score1 = new Score(game1, jackBauer, 1.0);
+            scoreRepository.save(score1);
+            Score score2 = new Score(game1, chloeOBrian, 0.0);
+            scoreRepository.save(score2);
+            Score score3 = new Score(game2, jackBauer, 0.5);
+            scoreRepository.save(score3);
+            Score score4 = new Score(game2, chloeOBrian, 0.5);
+            scoreRepository.save(score4);
+            Score score5 = new Score(game3, chloeOBrian, 1.0);
+            scoreRepository.save(score5);
+            Score score6 = new Score(game3, tonyAlmeida, 0.0);
+            scoreRepository.save(score6);
+            Score score7 = new Score(game4, chloeOBrian, 0.5);
+            scoreRepository.save(score7);
+            Score score8 = new Score(game4, jackBauer, 0.5);
+            scoreRepository.save(score8);
 
         };
 

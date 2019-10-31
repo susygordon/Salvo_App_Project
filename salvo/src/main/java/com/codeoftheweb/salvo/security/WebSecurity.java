@@ -1,3 +1,4 @@
+/*
 package com.codeoftheweb.salvo.security;
 
 import com.codeoftheweb.salvo.service.PlayerService;
@@ -15,11 +16,10 @@ import static com.codeoftheweb.salvo.security.SecurityConstants.SWAGGER_WHITELIS
 
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
-    private UserDetailsService userDetailsService;
+
     private PasswordEncoder passwordEncoder;
 
-    public WebSecurity(PlayerService playerService, PasswordEncoder passwordEncoder) {
-        this.userDetailsService  = userDetailsService;
+    public WebSecurity(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -44,3 +44,4 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 }
 
+*/

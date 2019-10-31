@@ -1,3 +1,4 @@
+/*
 package com.codeoftheweb.salvo.security;
 
 public class SecurityConstants {
@@ -8,4 +9,4 @@ public class SecurityConstants {
 	public static final String SIGN_UP_URL = "/users";
 	public static final String SCHEDULE_URL = "/alarms/schedule";
 	public static final String[] SWAGGER_WHITELIST = { "/swagger-resources/**", "/swagger-ui.html", "/v2/api-docs", "/webjars/**" };
-}
+}*/

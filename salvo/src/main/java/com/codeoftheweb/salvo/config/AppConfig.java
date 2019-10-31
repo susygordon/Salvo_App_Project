@@ -1,3 +1,4 @@
+/*
 package com.codeoftheweb.salvo.config;
 
 import org.springframework.context.annotation.Bean;
@@ -13,4 +14,4 @@ public class AppConfig {
     {
         return new BCryptPasswordEncoder();
     }
-}
+}*/

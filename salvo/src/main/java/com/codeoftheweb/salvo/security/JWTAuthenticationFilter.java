@@ -1,3 +1,4 @@
+/*
 package com.codeoftheweb.salvo.security;
 
 import com.codeoftheweb.salvo.model.Player;
@@ -93,3 +94,4 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
     }
 }
+*/

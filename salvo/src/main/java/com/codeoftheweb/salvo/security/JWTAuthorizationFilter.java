@@ -1,3 +1,4 @@
+/*
 package com.codeoftheweb.salvo.security;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -51,4 +52,4 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 		}
 		return null;
 	}
-}
+}*/

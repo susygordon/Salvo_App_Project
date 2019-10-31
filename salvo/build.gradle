@@ -35,9 +35,14 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    /*Estas lineas las agregamos ahora*/
+    /*Estas lineas las agregamos ahora
     compile 'com.auth0:java-jwt:3.4.0'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'*/
     testCompile 'com.google.code.gson:gson:2.8.5'
-    testImplementation 'org.springframework.security:spring-security-test'
+    //testImplementation 'org.springframework.security:spring-security-test'
+    compile 'javax.xml.bind:jaxb-api:2.3.0'
+    compile 'org.hibernate:hibernate-core:4.1.4.Final'
+    compile 'org.hibernate:hibernate-entitymanager:5.2.3.Final'
 }
+
+

@@ -17,7 +17,6 @@ public class Player {
 	@GenericGenerator(name = "native", strategy = "native")
 	private long id;
 
-
 	//Le restrijo que no sea nulo,
 	// que no este vacio y que sea unico
 	@NotNull
@@ -27,14 +26,11 @@ public class Player {
 
 	private String name;
 
-	@NotNull
-	@NotEmpty
-	private String password;
 
 	@OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
 	Set<GamePlayer> gamePlayers;
 
-	@OneToMany(mappedBy = "player",cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy = "player",fetch = FetchType.EAGER)
 	private List<Score> scores;
 
 	public Player() {
@@ -102,15 +98,41 @@ public class Player {
 		return dto;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public void setLastLogin(Date date) {
 
+	}
+
+	public Score getScore(Game game) {
+		return this.getScores()
+				.stream()
+				.filter(score -> score.getGame().getId() == game.getId())
+				.findFirst().orElse(null);
+	}
+
+	public Double getTotalScore(){
+		return getScores()
+				.stream()
+				.mapToDouble(Score::getScore).sum();
+	}
+
+	public Long getTotalWins(){
+		return getScores()
+				.stream()
+				.filter(score -> score.getScore() == 1d)
+				.count();
+	}
+
+	public Long getTotalLoses(){
+		return getScores()
+				.stream()
+				.filter(score -> score.getScore() == 0d)
+				.count();
+	}
+
+	public Long getTotalTies(){
+		return getScores()
+				.stream()
+				.filter(score -> score.getScore() == 0.5d)
+				.mapToDouble(Score::getScore).count();
 	}
 }

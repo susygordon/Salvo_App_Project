@@ -1,9 +1,5 @@
 package com.codeoftheweb.salvo.dto;
 
-import com.codeoftheweb.salvo.model.Player;
-
-import java.util.List;
-
 public class LeaderboardDTO {
     private Double totalScore;
     private Integer totalWins;
