@@ -7,7 +7,7 @@ package com.codeoftheweb.salvo.exception;
 * */
 public abstract class CustomException extends RuntimeException {
 
-	/*Defino cuatro atirbutos basicos para que pueda leerlo un usuario y no assustarse con el error*/
+	/*Defino cuatro atributos basicos para que pueda leerlo un usuario*/
 	private String code;
 	private String messageCode;
 	private String[] messageAtribs;

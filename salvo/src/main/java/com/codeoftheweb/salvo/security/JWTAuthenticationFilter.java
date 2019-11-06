@@ -1,4 +1,3 @@
-/*
 package com.codeoftheweb.salvo.security;
 
 import com.codeoftheweb.salvo.model.Player;
@@ -32,15 +31,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        //Le declaro el endpoint donde va a correr este filter
         setFilterProcessesUrl("/users/login");
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
-        //Intento hacer algo, sino, tiro una exception o la manejo de alguna forma
-        //O suerte campeon al metodo que me llame
+
         try {
             if (playerRepository == null) {
                 //Obtengo el contexto del servlet :D
@@ -54,7 +51,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             //Crean que esto converte lo que vione del request en una objeto del tipo player
             Player player = new ObjectMapper()
                     .readValue(req.getInputStream(), Player.class);
-            // Llamamos al authentication manager para que nos autentique... de onda ;). Lo pasamos como UsernamePasswordAuthentication token, porque, por lo general, lo tiene definido de esa forma. Implementa una interfaz llamada Authentication.
+            // Llamamos al authentication manager para que nos autentique). Lo pasamos como UsernamePasswordAuthentication token, porque, por lo general, lo tiene definido de esa forma. Implementa una interfaz llamada Authentication.
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             player.getEmail(),
@@ -62,8 +59,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                             new ArrayList<>())
             );
         } catch (IOException e) {
-            //Si algo falla tiramos una runtime exception como champions :)
-            //TODO esto no se debe hacer :D
             throw new RuntimeException(e);
         }
     }
@@ -94,4 +89,4 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
     }
 }
-*/
+

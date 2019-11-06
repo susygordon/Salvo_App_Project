@@ -1,4 +1,3 @@
-/*
 package com.codeoftheweb.salvo.security;
 
 import com.auth0.jwt.JWT;
@@ -51,4 +50,4 @@ public class JWTRepository {
 				.verify(token)
 				.getSubject();
 	}
-}*/
+}

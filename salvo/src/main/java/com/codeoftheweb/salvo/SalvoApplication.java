@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -20,14 +21,19 @@ public class SalvoApplication {
     @Bean
     public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, GamePlayerRepository gamePlayerRepository,
                                       ShipRepository shipRepository, SalvoRepository salvoRepository, ScoreRepository scoreRepository) {
+                                      BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         return (args) -> {
 
             // save a couple of players
             Player jackBauer = new Player("j.bauer@ctu.gov", "Jack Bauer");
+            jackBauer.setPassword(passwordEncoder.encode("Password123"));
             Player chloeOBrian = new Player("c.obrian@ctu.gov", "Chloe O'Brian");
+            chloeOBrian.setPassword(passwordEncoder.encode("Password123"));
             Player kimBauer = new Player("kim_bauer@gmail.com", "Kim Bauer");
+            kimBauer.setPassword(passwordEncoder.encode("Password123"));
             Player tonyAlmeida = new Player("t.almeida@ctu.gov", "Tony Almeida");
+            tonyAlmeida.setPassword(passwordEncoder.encode("Password123"));
 
             playerRepository.save(jackBauer);
             playerRepository.save(chloeOBrian);

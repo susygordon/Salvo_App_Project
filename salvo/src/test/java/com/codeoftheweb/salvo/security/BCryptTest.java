@@ -1,4 +1,4 @@
-/*
+
 package com.codeoftheweb.salvo.security;
 
 import org.junit.Test;
@@ -12,4 +12,3 @@ public class BCryptTest {
 		System.out.println(passwordEncoder.encode("qwerty123."));
 	}
 }
-*/

@@ -160,7 +160,22 @@ $(function () {
                 alert("Failed: " + textStatus);
             });
     }
-
+    let searchParams = new URLSearchParams(window.location.search);
+    if(!localStorage.getItem("token")) {
+        let token = searchParams.get('token')
+        if(!token){
+            window.location.replace("http://localhost:8080/web/login.html")
+        } else {
+            localStorage.setItem("token", token);
+        }
+    }
+    $.ajaxSetup({
+        headers:{
+            'Authorization': localStorage.getItem("token")
+        }
+    });
     loadData();
+
+
 
 });

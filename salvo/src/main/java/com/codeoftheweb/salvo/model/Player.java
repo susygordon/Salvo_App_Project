@@ -17,8 +17,6 @@ public class Player {
 	@GenericGenerator(name = "native", strategy = "native")
 	private long id;
 
-	//Le restrijo que no sea nulo,
-	// que no este vacio y que sea unico
 	@NotNull
 	@NotEmpty
 	@Column(unique = true)
@@ -26,6 +24,9 @@ public class Player {
 
 	private String name;
 
+	@NotNull
+	@NotEmpty
+	private String password;
 
 	@OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
 	Set<GamePlayer> gamePlayers;
@@ -57,6 +58,9 @@ public class Player {
 		this.scores = scores;
 	}
 
+	public String getPassword() {return password; }
+
+	public void setPassword(String password) {this.password = password;}
 
 	public String getEmail() {
 		return this.email;

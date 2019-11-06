@@ -30,7 +30,6 @@ public class SalvoController {
     public List<Map<String,Object>> getGames(){
         List<Game> gamesList = this.gameRepository.findAll();
         List<Map<String,Object>> gamesMap = new ArrayList<>();
-        //meti el new map adentro del for por que me pasaba esto https://stackoverflow.com/questions/4100486/java-create-a-list-of-hashmaps
         List<Map<String,Object>> gamePlayerMap = new ArrayList<>();
 
         for(Game g:gamesList){

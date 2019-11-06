@@ -26,9 +26,6 @@ public class Salvo {
 
     private int turn;
 
-    //private String cell;
-
-
     public Salvo(GamePlayer gamePlayer, int turn, List<String> locations) {
         this.gamePlayer = gamePlayer;
         this.turn = turn;
